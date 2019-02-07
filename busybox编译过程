@@ -1,0 +1,34 @@
+arm-linux-gcc下载地址
+https://github.com/friendlyarm/prebuilts
+
+查看INSTALL文件可知
+make defconfig
+make menuconfig
+千万不要执行默认的 make install ，极有可能破坏开发机的文件系统
+
+#jz2440 v3 使用编译器 - arm-linux-gcc 4.4.3 
+2019.02.07更新：
+    4.5.1能够编译的busybox和4.4.3一样，但是编译生成的rootfs无法加载使用
+    4.9.3与4.5.1效果相同
+##busybox-1.23.2可以一次通过编译
+    make CROSS_COMPILE=arm-linux-  CONFIG_PREFIX=../roots/busybox-1.23.2-root install  #在指定目录下生成busybox 根文件系统
+
+##编译busybox-1.29.2需要关闭两个模块
+    make menuconfig
+    Linux System Utilities--->nsenter   #解决编译错误  nsenter.c:(.text.nsenter_main+0x1a8): undefined reference to `setns'
+    Coreutils--->sync                   #解决编译错误  sync.c:(.text.sync_main+0x7c): undefined reference to `syncfs'
+
+移植目标：
+wolfssl代替openssl,减少镜像大小
+裁剪不必要的lib，减少镜像大小
+比较全面的测试
+
+#使用gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf可以一次通过busybox 1.29.3的编译
+make CROSS_COMPILE=arm-linux-gnueabihf- CONFIG_PREFIX=../roots/busybox-1.29.3-root install
+
+init/init.c
+    init_main
+        parse_inittab
+            parser_t *parser = config_open2("/etc/inittab", fopen_for_read);
+            new_init_action(...)
+        run_actions(...)
