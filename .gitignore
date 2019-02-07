@@ -1,2 +1,4 @@
 builded-*-rootfs/
 *.jffs2
+build/
+builded/

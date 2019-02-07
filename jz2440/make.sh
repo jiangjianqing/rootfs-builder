@@ -1,7 +1,7 @@
 #!/bin/sh
 
 busybox_version=busybox-1.23.2
-target_rootfs=../builded-jz2440-rootfs
+target_rootfs=../builded/jz2440-rootfs
 
 rm -rf $busybox_version
 rm -rf $target_rootfs
